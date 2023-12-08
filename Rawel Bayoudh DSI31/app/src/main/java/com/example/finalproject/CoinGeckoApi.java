@@ -1,6 +1,5 @@
 package com.example.finalproject;
 
-// Add the necessary imports
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;

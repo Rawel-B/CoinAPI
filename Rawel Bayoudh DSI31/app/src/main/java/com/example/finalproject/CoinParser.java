@@ -14,6 +14,7 @@ public class CoinParser {
 
                 String name = coinObject.getString("name");
                 String symbol = coinObject.getString("symbol");
+                String id = coinObject.getString("id");
 
                 System.out.println("Name: " + name + ", Symbol: " + symbol);
             }

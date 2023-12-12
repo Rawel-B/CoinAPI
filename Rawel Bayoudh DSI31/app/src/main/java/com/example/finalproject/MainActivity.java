@@ -6,12 +6,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
+import android.content.Intent;
+import android.view.View;
+import android.widget.AdapterView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView coinListView;
     private List<String> coinNames;
+    private List<String> coinIds;
     private ArrayAdapter<String> adapter;
     private SearchView searchView;
 
@@ -29,13 +30,25 @@ public class MainActivity extends AppCompatActivity {
 
         coinListView = findViewById(R.id.coinListView);
         coinNames = new ArrayList<>();
+        coinIds = new ArrayList<>();  // Initialize coinIds list
         searchView = findViewById(R.id.searchView);
 
-        // Perform the network request in a background thread
         new CoinFetchTask().execute();
 
-        // Set up search functionality
         setupSearchView();
+
+        coinListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the selected coin's id
+                String selectedCoinId = coinIds.get(position);
+
+                // Open a new activity with the selected coin's id
+                Intent intent = new Intent(MainActivity.this, CoinDetailsActivity.class);
+                intent.putExtra("COIN_ID", selectedCoinId);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setupSearchView() {
@@ -104,7 +117,9 @@ public class MainActivity extends AppCompatActivity {
 
                     // Extract data from the coinObject (e.g., name, symbol, etc.)
                     String name = coinObject.getString("name");
+                    String id = coinObject.getString("id");
                     coinNames.add(name);
+                    coinIds.add(id);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
